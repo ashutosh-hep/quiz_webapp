@@ -46,32 +46,6 @@ def sign(request):
 def home(request):
     email = request.POST.get('email')
     password = request.POST.get('password')
-    """
-    data = {
-        "q":"How many different cloud deployment models?",
-        "option 1":2,
-        "option 2":3,
-        "option 3":7,
-        "option 4":4,
-        "option 5":10,
-        "ans":3,
-        "ans2":2
-    }
-
-    database.child("csp").child("GCP").child("Q__2").set(data)
-
-    
-    data = {
-        "q":"How many different cloud deployment models?",
-        "option 1":2,
-        "option 2":3,
-        "option 3":7,
-        "option 4":4,
-        "ans":3
-    }
-
-    database.child("csp").child("Azure").child("Q_2").set(data)
-    """
     
     try:
 
