@@ -136,12 +136,26 @@ def go(request):
     if request.method == "GET" and "csrfmiddlewaretoken" in request.GET:
         #earch = request.GET.get("search")
 
-        b = request.GET.get('csp1')
 
-        if b == "GCP":
+        ku = 1
+
+        if ku == 1:
+
+
+            b = request.GET.get('csp1')
+
+            if b == "GCP":
+
+                fins = "GCP"
+
+            elif b == "AWS":
+                fins = "AWS"
+
+            else:
+                fins = "Azure"
 
         
-            con = database.child("csp").child("GCP").shallow().get().val()
+            con = database.child("csp").child(fins).shallow().get().val()
             d = []   
             for j in con:
                 d.append(j)
@@ -169,6 +183,8 @@ def go(request):
                 an5 = request.GET.get('ag5')
 
                 lis = [an1,an2,an3,an4,an5]
+
+            
 
                 ans = []
 
@@ -227,15 +243,16 @@ def go(request):
                 if len(i) == 3:
 
                     
-                    ques = database.child("csp").child("GCP").child(i).child("q").get().val()
-                    ans = database.child("csp").child("GCP").child(i).child("ans").get().val()
-                    option1 = database.child("csp").child("GCP").child(i).child("option 1").get().val()
-                    option2 = database.child("csp").child("GCP").child(i).child("option 2").get().val()
-                    option3 = database.child("csp").child("GCP").child(i).child("option 3").get().val()
-                    option4 = database.child("csp").child("GCP").child(i).child("option 4").get().val()
+                    ques = database.child("csp").child(fins).child(i).child("q").get().val()
+                    ans = database.child("csp").child(fins).child(i).child("ans").get().val()
+                    option1 = database.child("csp").child(fins).child(i).child("option 1").get().val()
+                    option2 = database.child("csp").child(fins).child(i).child("option 2").get().val()
+                    option3 = database.child("csp").child(fins).child(i).child("option 3").get().val()
+                    option4 = database.child("csp").child(fins).child(i).child("option 4").get().val()
 
-                    if  me== len(d):
+                    if  me == len(d):
                         pos1 = "final"
+                        
                             
 
                         return render(request, "go.html", {"pos1":pos1,"pos":pos,"sc":sc,"me":me,"m":b,"ques":ques,"ans":ans,"option1":option1,"option2":option2,
@@ -247,14 +264,14 @@ def go(request):
                         "option3":option3,"option4":option4})
                         
                 else:
-                    ques = database.child("csp").child("GCP").child(i).child("q").get().val()
-                    ans = database.child("csp").child("GCP").child(i).child("ans").get().val()
-                    ans2 = database.child("csp").child("GCP").child(i).child("ans2").get().val()
-                    option1 = database.child("csp").child("GCP").child(i).child("option 1").get().val()
-                    option2 = database.child("csp").child("GCP").child(i).child("option 2").get().val()
-                    option3 = database.child("csp").child("GCP").child(i).child("option 3").get().val()
-                    option4 = database.child("csp").child("GCP").child(i).child("option 4").get().val()
-                    option5 = database.child("csp").child("GCP").child(i).child("option 5").get().val()
+                    ques = database.child("csp").child(fins).child(i).child("q").get().val()
+                    ans = database.child("csp").child(fins).child(i).child("ans").get().val()
+                    ans2 = database.child("csp").child(fins).child(i).child("ans2").get().val()
+                    option1 = database.child("csp").child(fins).child(i).child("option 1").get().val()
+                    option2 = database.child("csp").child(fins).child(i).child("option 2").get().val()
+                    option3 = database.child("csp").child(fins).child(i).child("option 3").get().val()
+                    option4 = database.child("csp").child(fins).child(i).child("option 4").get().val()
+                    option5 = database.child("csp").child(fins).child(i).child("option 5").get().val()
                         
                         
                     if  me== len(d):
@@ -269,276 +286,30 @@ def go(request):
                         return render(request, "go.html", {"pos2":pos2,"pos":pos,"sc":sc,"me":me,"m":b,"quest":ques,"ans":ans,"ans2":ans2,"option1":option1,"option2":option2,
                          "option3":option3,"option4":option4,"option5":option5})
 
-        elif b == "AWS":
-            con = database.child("csp").child("AWS").shallow().get().val()
-            d = []   
-            for j in con:
-                d.append(j)
-
-            #cd = []
-            #for i in d:
-            type = request.GET.get('type')
-            if type == "radio":
-
-                an = request.GET.get('ag')
-                ans1 = request.GET.get('ans1')
-
-                sc = request.GET.get('sc')
-                sc = int(sc)
-
-                if an == ans1:
-                    sc = sc + 1
-
-            else:
-
-                an1 = request.GET.get('ag1')
-                an2 = request.GET.get('ag2')
-                an3 = request.GET.get('ag3')
-                an4 = request.GET.get('ag4')
-                an5 = request.GET.get('ag5')
-
-                lis = [an1,an2,an3,an4,an5]
-
-                ans = []
-
-                for i in lis:
-                    if i != "None":
-                        ans.append(i)
-
-                
-
-                ans1 = request.GET.get('ans1')
-                ans2 = request.GET.get('ans2')
-
-
-
-                sc = request.GET.get('sc')
-                sc = int(sc)
-
-                if ans1 and ans2 in ans:
-                    sc = sc + 1
-
-                
-
-
-            me = request.GET.get('inc')
-            me = int(me)
-
-            if me == len(d):
-                idtoken = request.session['uid']
-                a = authe.get_account_info(idtoken)
-                a = a["users"]
-                a = a[0]
-                email = a["email"]
-                per = (sc/me)*100
-                if per >= 40:
-                    res = "Congratulations!!! You are Pass."
-                else:
-                    res = "Oops! Your are Fail."
-                
-                subject = " Your Result on Quizwerr "
-                message = (str(res) + ", total Marks is:-"+str(sc)+ ", percentange is:-"+str(per)+"%")
-                from_email = settings.EMAIL_HOST_USER
-                to_list = [email]
-                send_mail(subject, message, from_email, to_list, fail_silently=True)
-
-                return render(request, "go.html",{"res":res,"score":sc,"ms":b})
-
-            else:
-                i = d[me]
-
-
-                me = me + 1                
-
-                pos = "not first"
-
-                if len(i) == 3:
-
-                    
-                    ques = database.child("csp").child("AWS").child(i).child("q").get().val()
-                    ans = database.child("csp").child("AWS").child(i).child("ans").get().val()
-                    option1 = database.child("csp").child("AWS").child(i).child("option 1").get().val()
-                    option2 = database.child("csp").child("AWS").child(i).child("option 2").get().val()
-                    option3 = database.child("csp").child("AWS").child(i).child("option 3").get().val()
-                    option4 = database.child("csp").child("AWS").child(i).child("option 4").get().val()
-
-                    if  me== len(d):
-                        pos1 = "final"
-                            
-
-                        return render(request, "go.html", {"pos1":pos1,"pos":pos,"sc":sc,"me":me,"m":b,"ques":ques,"ans":ans,"option1":option1,"option2":option2,
-                        "option3":option3,"option4":option4})
-
-                    else:
-                        pos2 = "not final"
-                        return render(request, "go.html", {"pos2":pos2,"pos":pos,"sc":sc,"me":me,"m":b,"ques":ques,"ans":ans,"option1":option1,"option2":option2,
-                        "option3":option3,"option4":option4})
-                        
-                else:
-                    ques = database.child("csp").child("AWS").child(i).child("q").get().val()
-                    ans = database.child("csp").child("AWS").child(i).child("ans").get().val()
-                    ans2 = database.child("csp").child("AWS").child(i).child("ans2").get().val()
-                    option1 = database.child("csp").child("AWS").child(i).child("option 1").get().val()
-                    option2 = database.child("csp").child("AWS").child(i).child("option 2").get().val()
-                    option3 = database.child("csp").child("AWS").child(i).child("option 3").get().val()
-                    option4 = database.child("csp").child("AWS").child(i).child("option 4").get().val()
-                    option5 = database.child("csp").child("AWS").child(i).child("option 5").get().val()
-                        
-                        
-                    if  me== len(d):
-                        pos1 = "final"
-                            
-
-                        return render(request, "go.html", {"pos1":pos1,"pos":pos,"sc":sc,"me":me,"m":b,"quest":ques,"ans":ans,"ans2":ans2,"option1":option1,"option2":option2,
-                        "option3":option3,"option4":option4,"option5":option5})
-
-                    else:
-                        pos2 = "not final"
-                        return render(request, "go.html", {"pos2":pos2,"pos":pos,"sc":sc,"me":me,"m":b,"quest":ques,"ans":ans,"ans2":ans2,"option1":option1,"option2":option2,
-                         "option3":option3,"option4":option4,"option5":option5})
-
-
-        else:
-            con = database.child("csp").child("Azure").shallow().get().val()
-            d = []   
-            for j in con:
-                d.append(j)
-
-            #cd = []
-            #for i in d:
-            type = request.GET.get('type')
-            if type == "radio":
-
-                an = request.GET.get('ag')
-                ans1 = request.GET.get('ans1')
-
-                sc = request.GET.get('sc')
-                sc = int(sc)
-
-                if an == ans1:
-                    sc = sc + 1
-
-            else:
-
-                an1 = request.GET.get('ag1')
-                an2 = request.GET.get('ag2')
-                an3 = request.GET.get('ag3')
-                an4 = request.GET.get('ag4')
-                an5 = request.GET.get('ag5')
-
-                lis = [an1,an2,an3,an4,an5]
-
-                ans = []
-
-                for i in lis:
-                    if i != "None":
-                        ans.append(i)
-
-                
-
-                ans1 = request.GET.get('ans1')
-                ans2 = request.GET.get('ans2')
-
-
-
-                sc = request.GET.get('sc')
-                sc = int(sc)
-
-                if ans1 and ans2 in ans:
-                    sc = sc + 1
-
-                
-
-
-            me = request.GET.get('inc')
-            me = int(me)
-
-            if me == len(d):
-
-                idtoken = request.session['uid']
-                a = authe.get_account_info(idtoken)
-                a = a["users"]
-                a = a[0]
-                email = a["email"]
-                per = (sc/me)*100
-                if per >= 40:
-                    res = "Congratulations!!! You are Pass."
-                else:
-                    res = "Oops! Your are Fail."
-                
-                subject = " Your Result on Quizwerr "
-                message = (str(res) + ", total Marks is:-"+str(sc)+ ", percentange is:-"+str(per)+"%")
-                from_email = settings.EMAIL_HOST_USER
-                to_list = [email]
-                send_mail(subject, message, from_email, to_list, fail_silently=True)
-
-                return render(request, "go.html",{"res":res,"score":sc,"ms":b})
-
-            else:
-                i = d[me]
-
-
-                me = me + 1                
-
-                pos = "not first"
-
-                if len(i) == 3:
-
-                    
-                    ques = database.child("csp").child("Azure").child(i).child("q").get().val()
-                    ans = database.child("csp").child("Azure").child(i).child("ans").get().val()
-                    option1 = database.child("csp").child("Azure").child(i).child("option 1").get().val()
-                    option2 = database.child("csp").child("Azure").child(i).child("option 2").get().val()
-                    option3 = database.child("csp").child("Azure").child(i).child("option 3").get().val()
-                    option4 = database.child("csp").child("Azure").child(i).child("option 4").get().val()
-
-                    if  me== len(d):
-                        pos1 = "final"
-                            
-
-                        return render(request, "go.html", {"pos1":pos1,"pos":pos,"sc":sc,"me":me,"m":b,"ques":ques,"ans":ans,"option1":option1,"option2":option2,
-                        "option3":option3,"option4":option4})
-
-                    else:
-                        pos2 = "not final"
-                        return render(request, "go.html", {"pos2":pos2,"pos":pos,"sc":sc,"me":me,"m":b,"ques":ques,"ans":ans,"option1":option1,"option2":option2,
-                        "option3":option3,"option4":option4})
-                        
-                else:
-                    ques = database.child("csp").child("Azure").child(i).child("q").get().val()
-                    ans = database.child("csp").child("Azure").child(i).child("ans").get().val()
-                    ans2 = database.child("csp").child("Azure").child(i).child("ans2").get().val()
-                    option1 = database.child("csp").child("Azure").child(i).child("option 1").get().val()
-                    option2 = database.child("csp").child("Azure").child(i).child("option 2").get().val()
-                    option3 = database.child("csp").child("Azure").child(i).child("option 3").get().val()
-                    option4 = database.child("csp").child("Azure").child(i).child("option 4").get().val()
-                    option5 = database.child("csp").child("Azure").child(i).child("option 5").get().val()
-                        
-                        
-                    if  me== len(d):
-                        pos1 = "final"
-                            
-
-                        return render(request, "go.html", {"pos1":pos1,"pos":pos,"sc":sc,"me":me,"m":b,"quest":ques,"ans":ans,"ans2":ans2,"option1":option1,"option2":option2,
-                        "option3":option3,"option4":option4,"option5":option5})
-
-                    else:
-                        pos2 = "not final"
-                        return render(request, "go.html", {"pos2":pos2,"pos":pos,"sc":sc,"me":me,"m":b,"quest":ques,"ans":ans,"ans2":ans2,"option1":option1,"option2":option2,
-                         "option3":option3,"option4":option4,"option5":option5})
-
-
+       
 
     else:
 
         
+        ku = 1
 
-        a = request.POST.get('csp')
-    
-        if a == "GCP":
+        if ku == 1:
+
+
+            a = request.POST.get('csp')
+
+            if a == "GCP":
+
+                fins = "GCP"
+
+            elif a == "AWS":
+                fins = "AWS"
+
+            else:
+                fins = "Azure"
 
         
-            con = database.child("csp").child("GCP").shallow().get().val()
+            con = database.child("csp").child(fins).shallow().get().val()
             d = []   
             for j in con:
                 d.append(j)
@@ -551,66 +322,17 @@ def go(request):
 
             pos2 = "l"
                 
-            ques = database.child("csp").child("GCP").child(i).child("q").get().val()
-            ans = database.child("csp").child("GCP").child(i).child("ans").get().val()
-            option1 = database.child("csp").child("GCP").child(i).child("option 1").get().val()
-            option2 = database.child("csp").child("GCP").child(i).child("option 2").get().val()
-            option3 = database.child("csp").child("GCP").child(i).child("option 3").get().val()
-            option4 = database.child("csp").child("GCP").child(i).child("option 4").get().val()
+            ques = database.child("csp").child(fins).child(i).child("q").get().val()
+            ans = database.child("csp").child(fins).child(i).child("ans").get().val()
+            option1 = database.child("csp").child(fins).child(i).child("option 1").get().val()
+            option2 = database.child("csp").child(fins).child(i).child("option 2").get().val()
+            option3 = database.child("csp").child(fins).child(i).child("option 3").get().val()
+            option4 = database.child("csp").child(fins).child(i).child("option 4").get().val()
                 
-
+            
             return render(request, "go.html", {"pos2":pos2,"sc":sc,"me":me,"m":a,"ques":ques,"ans":ans,"option1":option1,"option2":option2,
             "option3":option3,"option4":option4})
         
-        elif a == "AWS":
-            con = database.child("csp").child("AWS").shallow().get().val()
-            d = []   
-            for j in con:
-                d.append(j)
-
-            #cd = []
-            #for i in d:
-            i = d[0]
-            me = 1
-            sc = 0
-                
-            pos2 = "l"
-
-            ques = database.child("csp").child("AWS").child(i).child("q").get().val()
-            ans = database.child("csp").child("AWS").child(i).child("ans").get().val()
-            option1 = database.child("csp").child("AWS").child(i).child("option 1").get().val()
-            option2 = database.child("csp").child("AWS").child(i).child("option 2").get().val()
-            option3 = database.child("csp").child("AWS").child(i).child("option 3").get().val()
-            option4 = database.child("csp").child("AWS").child(i).child("option 4").get().val()
-                
-
-            return render(request, "go.html", {"pos2":pos2,"sc":sc,"me":me,"m":a,"ques":ques,"ans":ans,"option1":option1,"option2":option2,
-            "option3":option3,"option4":option4})
-
-        else:
-            con = database.child("csp").child("Azure").shallow().get().val()
-            d = []   
-            for j in con:
-                d.append(j)
-
-            #cd = []
-            #for i in d:
-            i = d[0]
-            me = 1
-            sc = 0
-                
-            pos2 = "l"
-            ques = database.child("csp").child("Azure").child(i).child("q").get().val()
-            ans = database.child("csp").child("Azure").child(i).child("ans").get().val()
-            option1 = database.child("csp").child("Azure").child(i).child("option 1").get().val()
-            option2 = database.child("csp").child("Azure").child(i).child("option 2").get().val()
-            option3 = database.child("csp").child("Azure").child(i).child("option 3").get().val()
-            option4 = database.child("csp").child("Azure").child(i).child("option 4").get().val()
-                
-
-            return render(request, "go.html", {"pos2":pos2,"sc":sc,"me":me,"m":a,"ques":ques,"ans":ans,"option1":option1,"option2":option2,
-            "option3":option3,"option4":option4})
-
 
 def sign2(request):
     return render(request, "sign.html")
